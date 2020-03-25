@@ -7,7 +7,7 @@ Page({
   data: {
     hasPhoto:false,
     toolSelect:"color",
-    selectColor:0,
+    selectColor:-1,
     colorList:["#f00",'#f2f2f2'],
     windowHeight:0,
     windowWidth:0,
@@ -17,7 +17,9 @@ Page({
     drawCanvas:"",
     isEaser:false,
     isRemove:false,
-    chooseImg:''
+    chooseImg:'',
+    btnText:"确定",
+    saveTempImage:"",//最终涂鸦完的图片
   },
 
   /**
@@ -60,9 +62,11 @@ Page({
     this.setData({
       hasPhoto:data,
       toolSelect: "color",
-      selectColor: 0,
+      selectColor: -1,
       isEaser: false,
       isRemove: false,
+      drawCanvas:"",
+      chooseImg:""
     })
   },
   selectTool(e){
@@ -89,29 +93,50 @@ Page({
     })
   },
   touchStart(e){
-    this.data.drawCanvas = wx.createCanvasContext("show");
-    this.data.drawCanvas.setLineWidth(this.data.lineWidth);
-    this.data.drawCanvas.setStrokeStyle(this.data.colorList[this.data.selectColor])
-    let { x, y } = e.changedTouches[0];
-    this.data.startX=x;
-    this.data.startY=y;
+    if(this.data.selectColor!=-1){
+      console.log(this.data.hasPhoto)
+      if (this.data.hasPhoto) {
+        this.data.drawCanvas = wx.createCanvasContext("showHasImage");
+      } else {
+        this.data.drawCanvas = wx.createCanvasContext("show");
+      }
+      this.data.drawCanvas.setLineWidth(this.data.lineWidth);
+      this.data.drawCanvas.setStrokeStyle(this.data.colorList[this.data.selectColor])
+      let { x, y } = e.changedTouches[0];
+      this.data.startX = x;
+      this.data.startY = y;
+    }else{
+      wx.showToast({
+        title: '请先选择颜色',
+        icon:"none"
+      })
+    }
+    
   },
   touchMove(e){
-    let { x, y } = e.changedTouches[0];
-    if(this.data.isEaser){
-      this.data.drawCanvas.clearRect(x,y,20,20)
-    }else if(this.data.isRemove){
-      this.data.drawCanvas.clearRect(0, 0, this.data.windowWidth, this.data.windowWidth)
+    if (this.data.selectColor != -1) {
+      let { x, y } = e.changedTouches[0];
+      if (this.data.isEaser) {
+        this.data.drawCanvas.clearRect(x, y, 20, 20)
+      } else if (this.data.isRemove) {
+        this.data.drawCanvas.clearRect(0, 0, this.data.windowWidth, this.data.windowWidth)
+      } else {
+        this.data.drawCanvas.moveTo(this.data.startX, this.data.startY);
+        this.data.drawCanvas.lineTo(x, y);
+        this.data.drawCanvas.setLineCap('round');
+        this.data.drawCanvas.setLineJoin('round')
+        this.data.startX = x;
+        this.data.startY = y
+        this.data.drawCanvas.stroke();
+      }
+      this.data.drawCanvas.draw(true)
     }else{
-      this.data.drawCanvas.moveTo(this.data.startX, this.data.startY);
-      this.data.drawCanvas.lineTo(x, y);
-      this.data.drawCanvas.setLineCap('round');
-      this.data.drawCanvas.setLineJoin('round')
-      this.data.startX = x;
-      this.data.startY = y
-      this.data.drawCanvas.stroke();
+      wx.showToast({
+        title: '请先选择颜色',
+        icon: "none"
+      })
     }
-    this.data.drawCanvas.draw(true)
+   
   },
   changeLine(e){
     let value = e.detail.value;
@@ -119,39 +144,89 @@ Page({
       lineWidth: value,
     })
   },
-  download(){
-    if (this.data.hasPhoto){
-
+  sure(){
+    if(this.data.btnText=="确定"){
+      if(this.data.hasPhoto){
+        this.saveDraw("showHasImage");
+      }else{
+        this.saveDraw("show");
+      }
+      this.setData({
+        btnText:'下载'
+      })
     }else{
-      this.downloadPhoto("show")
+      this.downloadPhoto()
     }
   },
-  downloadPhoto(canvasId){
+  saveDraw(canvasId){
+    let that=this
+    setTimeout(()=>{
+      wx.canvasToTempFilePath({
+        x: 0,
+        y: 0,
+        width: that.data.windowWidth,
+        height: that.data.windowWidth,
+        destWidth: that.data.windowWidth,
+        destHeight: that.data.windowWidth,
+        canvasId: canvasId,
+        success: function (e) {
+          that.data.saveTempImage = e.tempFilePath;
+          console.log(that.data.saveTempImage)
+          that.together()
+        }
+      })
+    },1000)
+  },
+  together(){
+    let lastCanvas = wx.createCanvasContext("lastDownload");
+    if(this.data.hasPhoto){
+      lastCanvas.drawImage(this.data.chooseImg, 0, 0, this.data.windowWidth, this.data.windowWidth)
+    }
+    lastCanvas.drawImage(this.data.saveTempImage, 0, 0, this.data.windowWidth, this.data.windowWidth)
+    lastCanvas.draw(this)
+  },
+  downloadPhoto(){
     let that = this;
     let temImage = ""
-    wx.canvasToTempFilePath({
-      x: 0,
-      y: 0,
-      width: that.data.windowWidth,
-      height: that.data.windowWidth,
-      destWidth: that.data.windowWidth,
-      destHeight: that.data.windowWidth,
-      canvasId: canvasId,
-      quality: 1,
-      success: function (res) {
-        temImage = res.tempFilePath;
-        wx.saveImageToPhotosAlbum({
-          filePath: temImage,
-          success(res) {
-            wx.showToast({
-              title: '保存成功',
-            })
-          }
-        })
-      }
-    })
+    setTimeout(()=>{
+      wx.canvasToTempFilePath({
+        x: 0,
+        y: 0,
+        width: that.data.windowWidth,
+        height: that.data.windowWidth,
+        destWidth: that.data.windowWidth,
+        destHeight: that.data.windowWidth,
+        canvasId: "lastDownload",
+        quality: 1,
+        success: function (res) {
+          temImage = res.tempFilePath;
+          wx.saveImageToPhotosAlbum({
+            filePath: temImage,
+            success:function(res){
+              console.log(res)
+              that.setData({
+                btnText:'确定'
+              })
+              wx.showToast({
+                title: '保存成功'
+              })
+            },
+            fail:function(err){
+              console.log(err)
+              that.setData({
+                btnText: '确定'
+              })
+              wx.showToast({
+                title: '保存失败'
+              })
+            }
+          })
+        }
+      })
+    },1000)
+   
   },
-  chooseImg(){
+  chooseImage(){
     let that=this;
     wx.chooseImage({
       count: 1,
@@ -159,11 +234,12 @@ Page({
       sourceType: ['album', 'camera'],
       success: function(res) {
         that.setData({
-          chooseImg: res.tempFilePaths[0]
+          chooseImg: res.tempFilePaths[0],
         })
       },
     })
   },
+
 
   /**
    * 生命周期函数--监听页面隐藏

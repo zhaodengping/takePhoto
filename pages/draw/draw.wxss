@@ -48,11 +48,51 @@
   margin-top: 20rpx;
 }
 
-.tips{
+.draw image{
+  position: absolute;
+  width: calc(100vw-2rpx);
+}
+.draw .tips{
+  position: absolute;
+  width: calc(100vw-2rpx);
   text-align: center;
   line-height: 100vw;
+  left: 50%;
+  transform: translate(-50%)
 }
 
-.draw image{
-  width: calc(100vw-2rpx);
+.module{
+  display: flex;
+  text-align: center;
+  width: 90%;
+}
+
+.img-total{
+  display: flex;
+  width: 100%;
+  text-align: center;
+}
+
+.img{
+  width: 60px;
+  margin-right: 5px;
+}
+
+.img image{
+  width:50px;
+  height: 50px;
+}
+
+.mask{
+  position: absolute;
+  top: 0;
+  width: 50px;
+  height: 50px;
+  z-index: 999;
+  background-color: #000;
+  opacity: 0.3;
+}
+
+.mask image{
+  width: 20px;
 }

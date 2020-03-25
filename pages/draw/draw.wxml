@@ -1,13 +1,14 @@
 <!--pages/draw/draw.wxml-->
+<canvas canvas-id="lastDownload" style="width:{{windowWidth-1}}px;height:{{windowWidth-1}}px;position:absolute;left:-999999px"></canvas>
 <view class="tab">
   <view class="{{hasPhoto?'':'tabSelect'}}" bindtap="changeTab" data-flag="no">没有图片</view>
   <view class="{{hasPhoto?'tabSelect':''}}" bindtap="changeTab" data-flag="yes">有图片</view>
 </view>
 <!-- 有图片 -->
 <view class="draw" wx:if="{{hasPhoto}}">
-  <view wx:if="{{chooseImg==''}}" class="tips" bindtap="chooseImg">+请先选择图片</view>
-  <image src="{{chooseImg}}" mode="heightFix" wx:else></image>
-  
+  <view wx:if="{{chooseImg==''}}" class="tips" bindtap="chooseImage">+请先选择图片</view>
+  <image src="{{chooseImg}}" mode="heightFix" wx:if="{{chooseImg!=''}}" bindtap="start"></image>
+  <canvas canvas-id="showHasImage" bindtouchstart="touchStart" bindtouchmove="touchMove" style="width:{{windowWidth-1}}px;height:{{windowWidth-1}}px;" wx:if="{{chooseImg!=''}}"></canvas>
 </view>
 <!-- 没有图片 -->
 <view class="draw" wx:if="{{!hasPhoto}}">
@@ -29,9 +30,8 @@
   <view class="{{toolSelect=='color'?'tabSelect':''}}" bindtap="selectTool" data-flag="color">颜色</view>
   <view class="{{toolSelect=='width'?'tabSelect':''}}" bindtap="selectTool" data-flag="width">宽度</view>
   <view class="{{toolSelect=='easer'?'tabSelect':''}}" bindtap="selectTool" data-flag="easer">橡皮擦</view>
-  <view class="{{toolSelect=='remove'?'tabSelect':''}}" bindtap="selectTool" data-flag="remove">清除</view>
 </view>
 
 <view class="download">
-  <button bindtap="download">下载</button>
+  <button bindtap="sure">{{btnText}}</button>
 </view>
