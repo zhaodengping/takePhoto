@@ -1,0 +1,37 @@
+<!--pages/draw/draw.wxml-->
+<view class="tab">
+  <view class="{{hasPhoto?'':'tabSelect'}}" bindtap="changeTab" data-flag="no">没有图片</view>
+  <view class="{{hasPhoto?'tabSelect':''}}" bindtap="changeTab" data-flag="yes">有图片</view>
+</view>
+<!-- 有图片 -->
+<view class="draw" wx:if="{{hasPhoto}}">
+  <view wx:if="{{chooseImg==''}}" class="tips" bindtap="chooseImg">+请先选择图片</view>
+  <image src="{{chooseImg}}" mode="heightFix" wx:else></image>
+  
+</view>
+<!-- 没有图片 -->
+<view class="draw" wx:if="{{!hasPhoto}}">
+  <canvas canvas-id="show" disable-scroll="false"  bindtouchstart="touchStart" bindtouchmove="touchMove" style="width:{{windowWidth-1}}px;height:{{windowWidth-1}}px"></canvas>
+</view>
+
+<!-- 工具栏 -->
+<view class="select">
+<!-- 选择颜色 -->
+  <view wx:if="{{toolSelect=='color'}}" class="color-tool">
+    <view wx:for='{{colorList}}' wx:key="{{index}}" class="color {{selectColor==index?'selectColor':''}}" style="background-color:{{item}}" bindtap="chooseColor" data-index="{{index}}"></view>
+  </view>
+  <!-- 选择宽度 -->
+  <view wx:if="{{toolSelect=='width'}}">
+    <slider max="20" min="1" step="1" value="{{lineWidth}}" bindchanging="changeLine" show-value></slider>
+  </view>
+</view>
+<view class="tool">
+  <view class="{{toolSelect=='color'?'tabSelect':''}}" bindtap="selectTool" data-flag="color">颜色</view>
+  <view class="{{toolSelect=='width'?'tabSelect':''}}" bindtap="selectTool" data-flag="width">宽度</view>
+  <view class="{{toolSelect=='easer'?'tabSelect':''}}" bindtap="selectTool" data-flag="easer">橡皮擦</view>
+  <view class="{{toolSelect=='remove'?'tabSelect':''}}" bindtap="selectTool" data-flag="remove">清除</view>
+</view>
+
+<view class="download">
+  <button bindtap="download">下载</button>
+</view>

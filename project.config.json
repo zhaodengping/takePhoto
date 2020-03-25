@@ -18,7 +18,7 @@
 	"compileType": "miniprogram",
 	"libVersion": "2.10.1",
 	"appid": "wxbe9d793f0bbcb7d7",
-	"projectname": "wechat",
+	"projectname": "takePhoto",
 	"debugOptions": {
 		"hidedInDevtools": []
 	},

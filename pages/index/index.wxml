@@ -1,4 +1,0 @@
-<camera device-position="width" flash="off" class="camerabgImage-view"></camera>
-<button class="save" bindtap="takePhoto">拍照</button>
-<canvas canvas-id="image-canvas" style='width:150px;height:150px'></canvas>
-<canvas canvas-id="show" style='width:{{canvasWidth}}px;height:400px' class="show"></canvas>
