@@ -4,6 +4,21 @@
   width: 100vw;
  }
 
+.showCanvas{
+  position: absolute;
+  top: 0;
+  height: 100vw;
+  width: 100vw;
+}
+
+.downloadCanvas{
+  position: absolute;
+  left: -999px;
+  top: -999px;
+  width: 100vw;
+  height: 100vw;
+}
+
 .first{
   position: absolute;
   bottom: 10rpx;
@@ -30,9 +45,8 @@
 }
 
 .left image{
-  width: 44px;
-  height: 44px;
-  border-radius: 5px;
+  width: 44rpx;
+  height: 44rpx;
 }
 
 .auto image{

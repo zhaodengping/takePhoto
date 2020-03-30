@@ -11,15 +11,15 @@ Page({
     modules: [{
       img: '../../static/mould1.png', //可以选择的模版
       showImg: '../../static/mould1.png', //在拍照的时候的图片
-      isSelected: true
+      isSelected: false
     }, {
       img: '../../static/mould2.png',
       showImg: '../../static/mould2.png',
       isSelected: false
     }, {
         img: '../../static/mould1.png',
-      showImg: '../../static/mould1.png',
-      isSelected: false
+        showImg: '../../static/mould1.png',
+        isSelected: false
     }, {
         img: '../../static/mould1.png',
       showImg: '../../static/mould2.png',
@@ -34,9 +34,15 @@ Page({
       isSelected: false
     }, {
         img: '../../static/mould1.png',
-      showImg: '../../static/mould1.png',
-      isSelected: false
+        showImg: '../../static/mould1.png',
+        isSelected: false
     }],
+    isSelectFilter:false,//是否点击滤镜按钮
+    hasSelectFilter:false,//是否已经选择的滤镜
+    showCanvas:'',
+    windowWidth:0,
+    windowHeight:0,
+    step:"1",
     
   },
 
@@ -44,7 +50,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.getSystem()
   },
 
   /**
@@ -59,6 +65,17 @@ Page({
    */
   onShow: function () {
 
+  },
+  getSystem(){
+    let that=this;
+    wx.getSystemInfo({
+      success: function(res) {
+        that.setData({
+          windowWidth:res.windowWidth,
+          windowHeight:res.windowHeight
+        })
+      },
+    })
   },
   //选择模版
   selectModule(e) {
@@ -76,9 +93,14 @@ Page({
       modules: this.data.modules,
       chooseImg: this.data.chooseImg
     })
-
-
-    
+    this.data.showCanvas = wx.createCanvasContext("show");
+    this.data.showCanvas.drawImage(this.data.chooseImg, 0, 0, this.data.windowWidth, this.data.windowWidth)
+    this.data.showCanvas.draw()
+  },
+  showFilter(){
+    this.setData({
+      isSelectFilter: true,//是否点击滤镜按钮
+    })
   },
   /**
    * 生命周期函数--监听页面隐藏
