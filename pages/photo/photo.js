@@ -74,6 +74,8 @@ Page({
     step:"1",
     chooseImg:"",//选择的模版
     selectFilter:"",//选择的滤镜
+    step2Canvas:"",
+    photoPath:"",//拍的照片的地址
   },
 
   /**
@@ -189,7 +191,36 @@ Page({
       hasSelectFilter:true
     })
   },
-  gotoChooseImg(){},
+//拍照
+  takePhoto(){
+    const ctx = wx.createCameraContext();
+    let that = this
+    ctx.takePhoto({
+      quality: 'normal',
+      success: (res) => {
+        let photoPath = res.tempImagePath
+        that.setData({
+          step: 2,
+          photoPath: photoPath
+        })
+      },
+      fail: (err) => {
+        console.log(err)
+      }
+    })
+  },
+  drawImage(){
+    this.data.step2Canvas.drawImage(this.data.photoPath,0,0,this.data.windowWidth,this.data.windowWidth);
+    if(this.data.chooseImg!=''){
+      this.data.step2Canvas.drawImage(this.data.chooseImg,0,0,this.data.windowWidth,this.data.windowWidth);
+    }
+    if(this.data.chooseFilter!=''){
+      this.data.showCanvas.setGlobalAlpha(this.data.selectFilter.opacity);
+      this.data.showCanvas.setFillStyle(this.data.selectFilter.bgColor);
+      this.data.showCanvas.fillRect(0, 0, this.data.windowWidth, this.data.windowHeight)
+    }
+    this.data.showCanvas.draw()
+  },
   /**
    * 生命周期函数--监听页面隐藏
    */

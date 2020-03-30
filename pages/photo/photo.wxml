@@ -32,7 +32,7 @@
   <view class="first" wx:if='{{!isSelectFilter}}'>
     <view class="left">
       <image src="../../static/filter.png" mode="aspectFill" wx:if='{{!hasSelectFilter}}' bindtap="showFilter"></image>
-      <image src="../../static/filter-choose.png" mode="aspectFill" wx:if='{{hasSelectFilter}}'></image>
+      <image src="../../static/filter-choose.png" mode="aspectFill" wx:if='{{hasSelectFilter}}' bindtap="showFilter"></image>
     </view>
     <view class="photo-btn">
       <view class="inner" bindtap="takePhoto"></view>
@@ -46,4 +46,10 @@
     <image src="/static/close.png" mode="widthFix" bindtap="closeFilter"></image>
     <image src="/static/right.png" mode="widthFix" bindtap="sureFilter"></image>
   </view>
+</view>
+
+<view wx:if="{{step=='2'}}">
+  <image src="{{photoPath}}" class="photoImg"></image>
+  <image src="{{chooseImg}}" class="photoImg"></image>
+  <view class="photoImg" style="background-color:{{selectFilter.bgColor}};opacity:{{selectFilter.opacity}}"></view>
 </view>
