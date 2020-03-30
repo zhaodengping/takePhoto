@@ -90,3 +90,12 @@
 .mask image{
   width: 20px;
 }
+
+.filter{
+  width: 60px;
+  height: 60px;
+}
+.operation-choose image{
+  width: 60rpx;
+  height: 60rpx;
+}

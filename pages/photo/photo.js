@@ -37,13 +37,43 @@ Page({
         showImg: '../../static/mould1.png',
         isSelected: false
     }],
+    filters:[{
+        bgColor:"rgb(222,185,255)",
+        opacity:0.2,
+        isSelected:false
+      }, {
+        bgColor: "rgb(222,185,255)",
+        opacity: 0.2,
+        isSelected: false
+      }, {
+        bgColor: "rgb(222,185,255)",
+        opacity: 0.2,
+        isSelected: false
+      }, {
+        bgColor: "rgb(187,229,255)",
+        opacity: 0.2,
+        isSelected: false
+      }, {
+        bgColor: "rgb(187,229,255)",
+        opacity: 0.2,
+        isSelected: false
+      }, {
+        bgColor: "rgb(187,229,255)",
+        opacity: 0.2,
+        isSelected: false
+      }, {
+        bgColor: "rgb(187,229,255)",
+        opacity: 0.2,
+        isSelected: false
+      }],
     isSelectFilter:false,//是否点击滤镜按钮
     hasSelectFilter:false,//是否已经选择的滤镜
     showCanvas:'',
     windowWidth:0,
     windowHeight:0,
     step:"1",
-    
+    chooseImg:"",//选择的模版
+    selectFilter:"",//选择的滤镜
   },
 
   /**
@@ -64,7 +94,18 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.data.showCanvas = wx.createCanvasContext("show");
+  },
+  changeDevice(){
+    let data=""
+    if(this.data.device=="front"){
+      data="back"
+    }else{
+      data="front"
+    }
+    this.setData({
+      device:data
+    })
   },
   getSystem(){
     let that=this;
@@ -93,7 +134,6 @@ Page({
       modules: this.data.modules,
       chooseImg: this.data.chooseImg
     })
-    this.data.showCanvas = wx.createCanvasContext("show");
     this.data.showCanvas.drawImage(this.data.chooseImg, 0, 0, this.data.windowWidth, this.data.windowWidth)
     this.data.showCanvas.draw()
   },
@@ -102,6 +142,54 @@ Page({
       isSelectFilter: true,//是否点击滤镜按钮
     })
   },
+  //选择滤镜
+  chooseFilter(e){
+    // this.data.showCanvas.setGlobalAlpha(1);
+    this.data.filters.forEach(item => {
+      item.isSelected = false;
+    })
+    let {index} = e.currentTarget.dataset;
+    this.data.selectFilter=this.data.filters[index];
+    let isSelected = `filters[${index}].isSelected`;
+    this.setData({
+      [isSelected]: true,
+      filters: this.data.filters,
+      selectFilter: this.data.selectFilter
+    })
+    if (this.data.chooseImg != '') {
+      this.data.showCanvas.drawImage(this.data.chooseImg, 0, 0, this.data.windowWidth, this.data.windowWidth)
+    }
+    this.data.showCanvas.setGlobalAlpha(this.data.selectFilter.opacity);
+    this.data.showCanvas.setFillStyle(this.data.selectFilter.bgColor);
+    this.data.showCanvas.fillRect(0,0,this.data.windowWidth,this.data.windowHeight)
+    this.data.showCanvas.draw()
+  },
+  // 关闭滤镜
+  closeFilter(){
+    this.data.filters.forEach(item => {
+      item.isSelected = false;
+    })
+    this.setData({
+      isSelectFilter:false,
+      hasSelectFilter:false,
+      selectFilter:"",
+      filters: this.data.filters,
+    })
+    this.data.showCanvas = wx.createCanvasContext("show");
+    this.data.showCanvas.setGlobalAlpha(1)
+    if (this.data.chooseImg != "") {
+      this.data.showCanvas.drawImage(this.data.chooseImg, 0, 0, this.data.windowWidth, this.data.windowWidth);
+    }
+    this.data.showCanvas.draw()
+  },
+  // 确定滤镜
+  sureFilter(){
+    this.setData({
+      isSelectFilter:false,
+      hasSelectFilter:true
+    })
+  },
+  gotoChooseImg(){},
   /**
    * 生命周期函数--监听页面隐藏
    */

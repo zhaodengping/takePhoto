@@ -21,7 +21,7 @@
   <scroll-view scroll-x='true' style='width:100%;height:60px' class="module" wx:if='{{isSelectFilter}}'>
     <view class="img-total">
       <view class="img" wx:for='{{filters}}' wx:key='index'>
-        <image src="{{item.img}}" bindtap="selectFilter" data-item='{{item}}' data-index="{{index}}"></image>
+        <view class="filter" style="background-color:{{item.bgColor}};opacity:{{item.opacity}}" bindtap="chooseFilter" data-index="{{index}}"></view>
         <view class="mask" wx:if='{{item.isSelected}}'>
           <image src="../../static/icon-color.png" mode="widthFix"></image>
         </view>
@@ -29,8 +29,8 @@
     </view>
   </scroll-view>
   <!-- 下面拍照功能 -->
-  <view class="first">
-    <view class="left" bindtap="gotoChooseImg">
+  <view class="first" wx:if='{{!isSelectFilter}}'>
+    <view class="left">
       <image src="../../static/filter.png" mode="aspectFill" wx:if='{{!hasSelectFilter}}' bindtap="showFilter"></image>
       <image src="../../static/filter-choose.png" mode="aspectFill" wx:if='{{hasSelectFilter}}'></image>
     </view>
@@ -40,5 +40,10 @@
     <view class="auto">
       <image src="../../static/auto.png" mode="widthFix" bindtap="changeDevice"></image>
     </view>
+  </view>
+  <!-- 选择滤镜 -->
+  <view wx:if="{{isSelectFilter}}" class="first operation-choose">
+    <image src="/static/close.png" mode="widthFix" bindtap="closeFilter"></image>
+    <image src="/static/right.png" mode="widthFix" bindtap="sureFilter"></image>
   </view>
 </view>
