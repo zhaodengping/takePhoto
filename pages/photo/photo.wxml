@@ -1,2 +1,26 @@
-<!--pages/photo/photo.wxml-->
-<text>pages/photo/photo.wxml</text>
+<view>
+  <camera device-position="{{device}}" flash="{{isFlash}}" class="camerabgImage-view" wx:if='{{showCamera}}'></camera>
+  <!-- 模版 -->
+<scroll-view scroll-x='true' style='width:100%;height:60px' class="module">
+  <view class="img-total">
+    <view class="img" wx:for='{{modules}}' wx:key='index'>
+      <image src="{{item.img}}" bindtap="selectModule" data-item='{{item}}' data-index="{{index}}"></image>
+      <view class="mask" wx:if='{{item.isSelected}}'>
+        <image src="../../static/icon-color.png" mode="widthFix"></image>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+  <!-- 下面拍照功能 -->
+<view class="first">
+  <view class="left" bindtap="gotoChooseImg">
+    <image src="../../static/icon-color.png" mode="aspectFill"></image>
+  </view>
+  <view class="photo-btn">
+    <view class="inner" bindtap="takePhoto"></view>
+  </view>
+  <view class="auto">
+    <image src="../../static/auto.png" mode="widthFix" bindtap="changeDevice"></image>
+  </view>
+</view>
+</view>

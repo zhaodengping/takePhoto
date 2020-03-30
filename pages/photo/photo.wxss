@@ -1,1 +1,78 @@
 /* pages/photo/photo.wxss */
+.camerabgImage-view{
+  height: 100vw;
+  width: 100vw;
+ }
+
+.first{
+  position: absolute;
+  bottom: 10rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 5%;
+  width: 90%;
+}
+.photo-btn{
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid #FFB2C8;
+  text-align: center;
+}
+
+.inner{
+  margin: 4px auto;
+  width: 48px;
+  height: 48px;
+  background-image: linear-gradient(#FFB2C8, #F07392);
+  border-radius: 50%;
+}
+
+.left image{
+  width: 44px;
+  height: 44px;
+  border-radius: 5px;
+}
+
+.auto image{
+  width: 25px;
+  border-radius: 5px;
+}
+
+
+.module{
+  margin-top: 20rpx;
+  display: flex;
+  text-align: center;
+}
+
+.img-total{
+  display: flex;
+  width: 100%;
+  text-align: center;
+}
+
+.img{
+  width: 60px;
+  margin-right: 5px;
+}
+
+.img image{
+  width:60px;
+  height: 90px;
+}
+
+.mask{
+  position: absolute;
+  top: 0;
+  width: 60px;
+  height: 100px;
+  z-index: 999;
+  background-color: #000;
+  opacity: 0.3;
+}
+
+.mask image{
+  width: 20px;
+}

@@ -5,7 +5,39 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    device: 'front',
+    isFlash:"off",
+    showCamera:true,
+    modules: [{
+      img: '../../static/mould1.png', //可以选择的模版
+      showImg: '../../static/mould1.png', //在拍照的时候的图片
+      isSelected: true
+    }, {
+      img: '../../static/mould2.png',
+      showImg: '../../static/mould2.png',
+      isSelected: false
+    }, {
+        img: '../../static/mould1.png',
+      showImg: '../../static/mould1.png',
+      isSelected: false
+    }, {
+        img: '../../static/mould1.png',
+      showImg: '../../static/mould2.png',
+      isSelected: false
+    }, {
+        img: '../../static/mould1.png',
+      showImg: '../../static/mould1.png',
+      isSelected: false
+    }, {
+        img: '../../static/mould1.png',
+      showImg: '../../static/mould2.png',
+      isSelected: false
+    }, {
+        img: '../../static/mould1.png',
+      showImg: '../../static/mould1.png',
+      isSelected: false
+    }],
+    
   },
 
   /**
@@ -28,7 +60,26 @@ Page({
   onShow: function () {
 
   },
+  //选择模版
+  selectModule(e) {
+    this.data.modules.forEach(item => {
+      item.isSelected = false;
+    })
+    let {
+      index,
+      item
+    } = e.currentTarget.dataset
+    this.data.chooseImg = item.showImg
+    let isSelected = `modules[${index}].isSelected`;
+    this.setData({
+      [isSelected]: true,
+      modules: this.data.modules,
+      chooseImg: this.data.chooseImg
+    })
 
+
+    
+  },
   /**
    * 生命周期函数--监听页面隐藏
    */
