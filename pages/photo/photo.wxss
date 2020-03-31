@@ -106,3 +106,29 @@
   width:100vw;
   height: 100vw;
 }
+.second{
+  position: absolute;
+  bottom: 20rpx;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100vw;
+}
+
+.second image{
+  width: 50rpx;
+}
+
+.download image{
+  width: 100rpx;
+}
+
+.input{
+  position: absolute;
+  border: 1rpx solid #000;
+  width: 400rpx
+}
+.input-text{
+  position: absolute;
+  width: 400rpx
+}

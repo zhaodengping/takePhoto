@@ -52,4 +52,16 @@
   <image src="{{photoPath}}" class="photoImg"></image>
   <image src="{{chooseImg}}" class="photoImg"></image>
   <view class="photoImg" style="background-color:{{selectFilter.bgColor}};opacity:{{selectFilter.opacity}}"></view>
+  <!-- 添加文字 -->
+  <input class="input" value="{{text}}" bindtouchstart="inputStart" bindtouchmove="inputMove" wx:if='{{!showText}}' bindblur="blurText"  style="left:{{left}}px;top:{{top}}px;border:1px solid #000" confirm-type="done" bindconfirm="sureText"></input>
+
+  <text class="input-text" style="left:{{left}}px;top:{{top}}px" wx:if='{{showText}}'>{{text}}</text>
+<!-- 下面返回和添加文字 -->
+  <view class="second">
+    <image src="/static/back.png" mode="widthFix" bindtap="back"></image>
+    <view class="download">
+      <image src="/static/download.png" mode="widthFix" bindtap="download"></image>
+    </view>
+    <image src="/static/text.png" mode="widthFix" bindtap="addText"></image>
+  </view>
 </view>

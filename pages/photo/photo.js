@@ -76,6 +76,12 @@ Page({
     selectFilter:"",//选择的滤镜
     step2Canvas:"",
     photoPath:"",//拍的照片的地址
+    text:"",
+    showText:true,
+    left:0,
+    top:0,
+    startX:0,
+    startY:0
   },
 
   /**
@@ -209,17 +215,61 @@ Page({
       }
     })
   },
-  drawImage(){
-    this.data.step2Canvas.drawImage(this.data.photoPath,0,0,this.data.windowWidth,this.data.windowWidth);
+  drawImage(canvasId){
+    if(this.data.photoPath!=''){
+      canvasId.drawImage(this.data.photoPath, 0, 0, this.data.windowWidth, this.data.windowWidth);
+    }
+    console.log(this.data.chooseImg)
     if(this.data.chooseImg!=''){
-      this.data.step2Canvas.drawImage(this.data.chooseImg,0,0,this.data.windowWidth,this.data.windowWidth);
+      canvasId.drawImage(this.data.chooseImg,0,0,this.data.windowWidth,this.data.windowWidth);
     }
     if(this.data.chooseFilter!=''){
-      this.data.showCanvas.setGlobalAlpha(this.data.selectFilter.opacity);
-      this.data.showCanvas.setFillStyle(this.data.selectFilter.bgColor);
-      this.data.showCanvas.fillRect(0, 0, this.data.windowWidth, this.data.windowHeight)
+      canvasId.setGlobalAlpha(this.data.selectFilter.opacity);
+      canvasId.setFillStyle(this.data.selectFilter.bgColor);
+      canvasId.fillRect(0, 0, this.data.windowWidth, this.data.windowHeight)
     }
-    this.data.showCanvas.draw()
+    canvasId.draw()
+  },
+  //返回
+  back(){
+    this.data.photoPath=""
+    this.data.showCanvas = wx.createCanvasContext("show");
+    this.drawImage(this.data.showCanvas)
+    this.setData({
+      step:1
+    })
+  },
+  //文字
+  addText(){
+    this.setData({
+      showText:false
+    })
+  },
+  blurText(e){
+    this.setData({
+      text: e.detail.value
+    })
+  },
+  inputStart(e) {
+    let { pageX, pageY } = e.changedTouches[0];
+    this.data.startX = pageX;
+    this.data.startY = pageY;
+  },
+  inputMove(e) {
+    let { pageX, pageY } = e.changedTouches[0];
+    this.setData({
+      left: pageX,
+      top: pageY
+    })
+  },
+  sureText(){
+    this.setData({
+      showText: true,
+      text: this.data.text
+    })
+  },
+  download(){
+    
   },
   /**
    * 生命周期函数--监听页面隐藏

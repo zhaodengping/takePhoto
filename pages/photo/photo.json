@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText": "拍照",
+  "disableScroll": true,
   "usingComponents": {}
 }
