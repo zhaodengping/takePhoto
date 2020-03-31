@@ -228,6 +228,9 @@ Page({
       canvasId.setFillStyle(this.data.selectFilter.bgColor);
       canvasId.fillRect(0, 0, this.data.windowWidth, this.data.windowHeight)
     }
+    if(this.data.text!=''){
+      canvasId.fillText(this.data.text, this.data.left, this.data.top)
+    }
     canvasId.draw()
   },
   //返回
@@ -269,7 +272,49 @@ Page({
     })
   },
   download(){
-    
+    //将像呈现在download的canvas上
+    let downloadCanvas = wx.createCanvasContext("download");
+    this.drawImage(downloadCanvas)
+    let that = this;
+    let photoPath = this.data.photoPath
+    setTimeout(() => {
+      wx.canvasToTempFilePath({
+        x: 0,
+        y: 0,
+        width: that.data.canvasWidth,
+        destWidth: that.data.canvasWidth * 2,
+        canvasId: 'download',
+        quality: 1,
+        success: function (res) {
+          let shareImg = res.tempFilePath;
+          wx.saveImageToPhotosAlbum({
+            filePath: photoPath,
+            success: res => {
+              wx.saveImageToPhotosAlbum({
+                filePath: shareImg,
+                success: res => {
+                  wx.showToast({
+                    title: '保存成功'
+                  })
+                },
+                fail() {
+                  wx.showToast({
+                    title: '保存失败',
+                    icon: 'none'
+                  })
+                }
+              })
+            },
+            fail: function (res) {
+              wx.showToast({
+                title: '保存失败',
+                icon: 'none'
+              })
+            }
+          })
+        },
+      })
+    }, 300)
   },
   /**
    * 生命周期函数--监听页面隐藏
